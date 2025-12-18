@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  fire-detection:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: fire-detection-system
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../data.json:/app/data.json
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - MAX_LOGS=100
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
