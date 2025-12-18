@@ -4,11 +4,8 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.124.4-009688.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg)](tests/)
 
-A professional, real-time fire detection monitoring system with temperature and gas level tracking. Features a modern web dashboard with live data visualization and a robust REST API for sensor integration.
-
-![Dashboard Preview](https://img.shields.io/badge/Dashboard-Live-orange)
+A simple, real-time fire detection monitoring system with temperature and gas level tracking. Features a modern web dashboard with live data visualization and a REST API for sensor integration.
 
 ## ✨ Features
 
@@ -16,33 +13,27 @@ A professional, real-time fire detection monitoring system with temperature and 
 - 📊 **Data Visualization** - Interactive Chart.js graphs with dual Y-axis tracking
 - 🔄 **Auto-refresh** - Dashboard updates every 2 seconds
 - 🎨 **Modern UI** - Professional dark-themed interface with glassmorphism
-- 🚀 **FastAPI Backend** - High-performance async API with automatic documentation
-- ✅ **Input Validation** - Pydantic models ensure data integrity
-- 📝 **Comprehensive Logging** - Structured logging for debugging and monitoring
-- 🧪 **Full Test Coverage** - Pytest suite with unit and integration tests
+- 🚀 **FastAPI Backend** - High-performance async API
+- 💾 **JSON Storage** - Simple file-based data persistence
+- 📝 **Logging** - Structured logging for monitoring
 - 🐳 **Docker Ready** - Containerized deployment support
-- 📚 **API Documentation** - Auto-generated Swagger UI and ReDoc
 
 ## 🏗️ Architecture
 
 ```
 fire-detection-system/
-├── main.py              # FastAPI application entry point
-├── config.py            # Configuration management
-├── models.py            # Pydantic data models
-├── storage.py           # Data storage layer (in-memory/database)
-├── utils.py             # Utility functions and logging
-├── templates/           # Jinja2 HTML templates
-│   └── dashboard.html   # Main dashboard interface
-├── tests/               # Test suite
-│   ├── conftest.py      # Pytest fixtures
-│   ├── test_api.py      # API endpoint tests
-│   ├── test_models.py   # Model validation tests
-│   └── test_storage.py  # Storage layer tests
+├── backend/
+│   ├── __init__.py
+│   └── main.py          # Complete API application
+├── frontend/
+│   └── templates/
+│       └── dashboard.html   # Web dashboard
+├── docker/
+│   ├── Dockerfile       # Container configuration
+│   └── docker-compose.yml   # Docker compose setup
 ├── requirements.txt     # Python dependencies
-├── Dockerfile           # Docker container configuration
-├── docker-compose.yml   # Docker Compose orchestration
-└── .env.example         # Environment variables template
+├── data.json            # JSON storage (auto-created)
+└── README.md
 ```
 
 ## 🚀 Quick Start
@@ -67,7 +58,13 @@ fire-detection-system/
 
 3. **Run the application**
    ```bash
-   uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+   cd backend
+   python main.py
+   ```
+   
+   Or with uvicorn:
+   ```bash
+   uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
 4. **Access the dashboard**
@@ -89,7 +86,7 @@ Health check endpoint
 ```json
 {
   "status": "healthy",
-  "timestamp": "2025-12-17 16:00:00",
+  "timestamp": "2025-12-18 16:00:00",
   "version": "1.0.0",
   "uptime_seconds": 123.45
 }
@@ -97,6 +94,126 @@ Health check endpoint
 
 #### `POST /status`
 Update sensor status with new readings
+
+**Request Body:**
+```json
+{
+  "status": "danger",
+  "temperature": 45.5,
+  "gas": 4500
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Status updated successfully",
+  "timestamp": "2025-12-18 16:00:00",
+  "data": {
+    "status": "danger",
+    "temperature": 45.5,
+    "gas": 4500,
+    "timestamp": "2025-12-18 16:00:00"
+  }
+}
+```
+
+#### `GET /api/stats`
+Get current statistics
+
+**Response:**
+```json
+{
+  "danger_count": 5,
+  "normal_count": 95,
+  "total_logs": 100,
+  "current_status": {
+    "status": "normal",
+    "temperature": 22.0,
+    "gas": 3800,
+    "timestamp": "2025-12-18 16:00:00"
+  },
+  "timestamp": "2025-12-18 16:00:00"
+}
+```
+
+#### `DELETE /api/logs`
+Clear all stored logs
+
+**Response:**
+```json
+{
+  "message": "All logs cleared successfully",
+  "timestamp": "2025-12-18 16:00:00"
+}
+```
+
+## 🐳 Docker Deployment
+
+### Using Docker Compose (Recommended)
+
+```bash
+cd docker
+docker-compose up -d
+```
+
+### Using Docker
+
+```bash
+# Build the image
+docker build -f docker/Dockerfile -t fire-detection-system .
+
+# Run the container
+docker run -d -p 8000:8000 --name fire-detection fire-detection-system
+```
+
+## 🔧 Configuration
+
+Configure via environment variables:
+
+```bash
+HOST=0.0.0.0          # Server host
+PORT=8000             # Server port
+MAX_LOGS=100          # Maximum logs to keep in memory
+```
+
+## 📊 Data Validation
+
+- **Temperature**: -50°C to 150°C (2 decimal places)
+- **Gas Level**: 0 to 10000 ppm (integer)
+- **Status**: "danger" or "normal"
+- **Timestamp**: Auto-generated if not provided
+
+## 🔌 Arduino/IoT Integration
+
+Send sensor data via HTTP POST:
+
+```cpp
+// Example Arduino code
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+void sendSensorData(String status, float temp, int gas) {
+  HTTPClient http;
+  http.begin("http://your-server:8000/status");
+  http.addHeader("Content-Type", "application/json");
+  
+  String payload = "{\"status\":\"" + status + 
+                   "\",\"temperature\":" + String(temp) + 
+                   ",\"gas\":" + String(gas) + "}";
+  
+  int httpCode = http.POST(payload);
+  http.end();
+}
+```
+
+## 📝 License
+
+MIT License
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
 
 **Request Body:**
 ```json

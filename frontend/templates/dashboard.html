@@ -224,7 +224,7 @@
         <h1>Fire Detection Dashboard</h1>
       </div>
       <div class="runtime-meta">
-        <div>Environment: Production-ready Mock</div>
+        <div>Environment: Production-ready</div>
         <div>Auto-refresh every 2s</div>
       </div>
     </header>
@@ -243,7 +243,7 @@
 
       <section class="card">
         <div class="card-title">Temperature</div>
-  <div class="metric-value">{{ current.temperature }}<span class="metric-unit">&deg;C</span></div>
+        <div class="metric-value">{{ current.temperature }}<span class="metric-unit">&deg;C</span></div>
         <div class="metric-label">Live Sensor Reading</div>
       </section>
 
@@ -268,7 +268,7 @@
       </section>
 
       <section class="card chart-card">
-  <div class="card-title">Historical Readings - Last 20 events</div>
+        <div class="card-title">Historical Readings - Last 20 events</div>
         <div class="chart-container">
           <canvas id="sensorChart"></canvas>
         </div>
@@ -276,7 +276,7 @@
     </main>
 
     <footer>
-  Fire Detection System - Chart analytics powered by Chart.js - {{ current.timestamp or 'No data yet' }}
+      Fire Detection System - Chart analytics powered by Chart.js - {{ current.timestamp or 'No data yet' }}
     </footer>
   </div>
 
@@ -302,9 +302,9 @@
     gasGradient.addColorStop(0.5, 'rgba(54,162,235,0.3)');
     gasGradient.addColorStop(1, 'rgba(54,162,235,0.05)');
 
-  const DEGREE = '\u00B0';
+    const DEGREE = '\u00B0';
 
-  const sensorChart = new Chart(ctx, {
+    const sensorChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: chartLabels,
