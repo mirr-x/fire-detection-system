@@ -8,7 +8,7 @@
 
 A simple, real-time fire detection monitoring system with temperature and gas level tracking. Features a modern web dashboard with live data visualization and a REST API for sensor integration.
 
-## ✨ Features
+##  Features
 
 -  **Real-time Monitoring** - Live status updates with danger/normal detection
 -  **Data Visualization** - Interactive Chart.js graphs with dual Y-axis tracking
@@ -19,7 +19,7 @@ A simple, real-time fire detection monitoring system with temperature and gas le
 -  **Logging** - Structured logging for monitoring
 -  **Docker Ready** - Containerized deployment support
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 fire-detection-system/
@@ -38,7 +38,7 @@ fire-detection-system/
 └── README.md
 ```
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 
@@ -74,7 +74,7 @@ fire-detection-system/
    - API Docs: http://localhost:8000/docs
    - ReDoc: http://localhost:8000/redoc
 
-## 📡 API Reference
+##  API Reference
 
 ### Endpoints
 
