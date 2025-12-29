@@ -13,11 +13,11 @@ A simple, real-time fire detection monitoring system with temperature and gas le
 -  **Real-time Monitoring** - Live status updates with danger/normal detection
 -  **Data Visualization** - Interactive Chart.js graphs with dual Y-axis tracking
 -  **Auto-refresh** - Dashboard updates every 2 seconds
-- 🎨 **Modern UI** - Professional dark-themed interface with glassmorphism
-- 🚀 **FastAPI Backend** - High-performance async API
-- 💾 **JSON Storage** - Simple file-based data persistence
-- 📝 **Logging** - Structured logging for monitoring
-- 🐳 **Docker Ready** - Containerized deployment support
+-  **Modern UI** - Professional dark-themed interface with glassmorphism
+-  **FastAPI Backend** - High-performance async API
+-  **JSON Storage** - Simple file-based data persistence
+-  **Logging** - Structured logging for monitoring
+-  **Docker Ready** - Containerized deployment support
 
 ## 🏗️ Architecture
 
